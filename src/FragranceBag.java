@@ -4,6 +4,8 @@ public class FragranceBag<MyType> implements BagInterface<MyType> {
     int numberOfProducts;
     static final int DEFAULT_CAPACITY = 25;
 
+    // Core Methods start
+
     // Task: Creates an empty bag having a given capacity.
     // @param capacity Indicates the size of the constructed array
     public FragranceBag(int capacity) {
@@ -19,12 +21,6 @@ public class FragranceBag<MyType> implements BagInterface<MyType> {
     public FragranceBag() {
         this(DEFAULT_CAPACITY);
     } // end default constructor
-
-    // Returns integer representing number of items in bag
-    @Override
-    public int getCurrentSize() {
-        return 0;
-    }
 
     private boolean isFull() {
         return numberOfProducts == myBag.length;
@@ -51,21 +47,6 @@ public class FragranceBag<MyType> implements BagInterface<MyType> {
     } // end add
 
     @Override
-    public MyType remove() {
-        return null;
-    }
-
-    @Override
-    public boolean remove(Object anEntry) {
-        return false;
-    }
-
-    @Override
-    public void clear() {
-
-    }
-
-    @Override
     public MyType[] toArray() {
         @SuppressWarnings("unchecked")
         MyType[] result = (MyType[]) new Object[DEFAULT_CAPACITY]; // unchecked
@@ -77,13 +58,88 @@ public class FragranceBag<MyType> implements BagInterface<MyType> {
         return result;
     }
 
+    // Core Methods end
+
+    // Returns integer representing number of items in bag
     @Override
-    public int getFrequencyOf(Object anEntry) {
-        return 0;
+    public int getCurrentSize() {
+        return numberOfProducts;
+    } // end getCurrentSize
+
+    // Removes then returns an item if array is not empty
+    @Override
+    public MyType remove() {
+        MyType result = null;
+        if (!isEmpty()) {
+            result = myBag[numberOfProducts - 1];
+            myBag[numberOfProducts - 1] = null;
+            numberOfProducts++;
+        } // end if
+        return result;
+    } // end remove
+
+    @Override
+    public void clear() {
+        while (!isEmpty()) {
+            remove();
+        }
+    }
+
+
+    @Override
+    public boolean remove(MyType anEntry) {
+        boolean wasFound = false;
+        int i = 0;
+        while (!wasFound && (i < numberOfProducts)) {
+            if (anEntry.equals(myBag[i])) {
+                wasFound = true;
+                myBag[i] = myBag[numberOfProducts - 1];
+                myBag[numberOfProducts - 1] = null;
+                numberOfProducts--;
+            }
+            else {
+                i++;
+            } // end if
+        } // end while
+        return wasFound;
     }
 
     @Override
-    public boolean contains(Object anEntry) {
+    public int getFrequencyOf(MyType anEntry) {
+        int counter = 0;
+        for (int i = 0; i < numberOfProducts; i++) {
+            if (anEntry.equals(myBag[i])) {
+                counter++;
+            } // end if
+        } // end for
+        return counter;
+    } // end getFrequencyOf
+
+    @Override
+    public boolean contains(MyType anEntry) {
+        for (int i = 0; i < numberOfProducts; i++) {
+            if (anEntry.equals(myBag[i])) {
+                return true;
+            } // end if
+        } // end for
         return false;
     }
+
+//    book solution
+//    @Override
+//    public boolean contains(MyType anEntry) {
+//        boolean wasFound = false;
+//        int index = 0;
+//        while (!wasFound && (index < numberOfProducts)) {
+//            if (anEntry.equals(myBag[index])) {
+//                wasFound = true;
+//            }
+//            else {
+//                index++;
+//            } // end if
+//        } // end while
+//        return wasFound;
+//    } // end contains
+
+
 }
